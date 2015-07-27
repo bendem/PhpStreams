@@ -20,6 +20,10 @@ class Optional {
         return new Optional();
     }
 
+    public static function of($arg): Optional {
+        return new Optional($arg);
+    }
+
     public function get() {
         if(!$this->hasValue) {
             // TODO Better exception hierarchy

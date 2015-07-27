@@ -6,9 +6,18 @@ use streams\Comparator;
 
 class NaturalComparator implements Comparator {
 
-    const INSTANCE = new NaturalComparator();
+    private static $INSTANCE = null;
 
-    private function compare($o1, $o2): int {
+    public function getInstance(): Comparator {
+        if(static::$INSTANCE === null) {
+            static::$INSTANCE = new NaturalComparator();
+        }
+        return static::$INSTANCE;
+    }
+
+    private function __construct() {}
+
+    public function compare($o1, $o2): int {
         return $o1 <=> $o2;
     }
 

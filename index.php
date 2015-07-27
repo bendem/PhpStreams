@@ -5,7 +5,7 @@ declare(strict_types = 1);
 /**
  * + Skipping is weird, it should maybe be handled outside the pipeline
  *
- * + Find/match/min/max stuff don't go through the execute method, a specific
+ * + match/min/max stuff don't go through the execute method, a specific
  *   one will be added
  *
  * + Need to replace OperationType with an enum when it's available
@@ -18,7 +18,10 @@ declare(strict_types = 1);
  *       $it->next();
  *   } would be wise?
  *
- * + Gotta find a way to sort stuff somehow
+ * + Gotta find a way to sort stuff somehow. Probably need to split the pipeline
+ *   operations for each sort (maybe combined with insertion sort)
+ *
+ * + findAny should ignore all kind of sorting
  *
  * + Flat maps are a pain in the ass
  *
@@ -148,9 +151,41 @@ separate();
 
 echo "reducing\n";
 $reduced = StreamBuilder::fromArray(range(1, 5))
-    ->reduce(0, new class implements BiFunc {
+    ->reduce(new class implements BiFunc {
         public function apply($prev, $val) {
             return $prev + $val;
         }
     });
-var_dump($reduced);
+var_dump($reduced->isPresent());
+var_dump($reduced->get());
+
+separate();
+
+echo "min\n";
+$min = StreamBuilder::of(3, 5, 1, 4, 9, 0)
+    ->min();
+var_dump($min->get());
+
+
+separate();
+
+echo "max\n";
+$max = StreamBuilder::of(3, 5, 1, 4, 9, 0)
+    ->max();
+var_dump($max->get());
+
+separate();
+
+echo "findFirst\n";
+$first = StreamBuilder::of(3, 4)
+    ->findFirst();
+var_dump($first->isPresent());
+var_dump($first->get());
+
+separate();
+
+echo "findFirst (none present)\n";
+$first = StreamBuilder::of()
+    ->findFirst();
+var_dump($first->isPresent());
+// var_dump($first->get());

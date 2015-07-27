@@ -19,8 +19,8 @@ interface Stream extends IteratorAggregate {
     function skip(int $count): Stream;
     function sort(Comparator $comparator = null): Stream;
 
-    function max(Comparator $comparator): Optional;
-    function min(Comparator $comparator): Optional;
+    function max(Comparator $comparator = null): Optional;
+    function min(Comparator $comparator = null): Optional;
 
     function findAny(): Optional;
     function findFirst(): Optional;
@@ -29,9 +29,10 @@ interface Stream extends IteratorAggregate {
     function anyMatch(Predicate $predicate): bool;
     function noneMatch(Predicate $predicate): bool;
 
-    function reduce($identity, BiFunc $biFunc);
+    // TODO Reduce with provided indentity (reduce($identity, BiFunc $accumulator))
+    function reduce(BiFunc $accumulator);
 
-    // TODO
+    // TODO Figure out what'd be a good prototype for this
     // function collect(Supplier $supplier,  $accumulator);
 
     function forEach(Consumer $consumer);

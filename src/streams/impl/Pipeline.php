@@ -3,6 +3,7 @@
 namespace streams\impl;
 
 use Exception;
+use InvalidArgumentException;
 use Traversable;
 
 class Pipeline {
@@ -21,6 +22,9 @@ class Pipeline {
     public function setLimit(int $count) {
         if($this->expired) {
             throw new Exception('Pipeline has already been executed');
+        }
+        if($count < 0) {
+            throw new InvalidArgumentException('Can\'t set negative limit');
         }
         $this->limit = $count;
     }

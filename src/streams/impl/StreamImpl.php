@@ -57,11 +57,18 @@ class StreamImpl implements Stream {
     }
 
     public function findFirst(): Optional {
-        // TODO: Implement findFirst() method.
+        $this->pipeline->setLimit(1);
+        $gen = $this->pipeline->execute(...$this->targets);
+        if($gen->valid()) {
+            return Optional::of($gen->current());
+        } else {
+            return Optional::empty();
+        }
     }
 
     public function findAny(): Optional {
-        // TODO: Implement findAny() method.
+        // TODO Ignore sorting!
+        return $this->findFirst();
     }
 
     public function allMatch(Predicate $predicate): bool {
@@ -72,7 +79,7 @@ class StreamImpl implements Stream {
         // TODO: Implement anyMatch() method.
     }
 
-    //function collect(Closure $supplier, Closure $accumulator): Stream {
+    //public function collect(Closure $supplier, Closure $accumulator): Stream {
     //     TODO: Implement collect() method.
     //}
 
@@ -91,30 +98,45 @@ class StreamImpl implements Stream {
         return $this;
     }
 
-    public function min(Comparator $comparator): Optional {
-        // TODO: Implement min() method.
+    public function min(Comparator $comparator = null): Optional {
+        return $this->reduce(new EvictionBiFunc($comparator, false));
     }
 
-    public function max(Comparator $comparator): Optional {
-        // TODO: Implement max() method.
+    public function max(Comparator $comparator = null): Optional {
+        return $this->reduce(new EvictionBiFunc($comparator, true));
     }
 
     public function noneMatch(Predicate $predicate): bool {
         // TODO: Implement noneMatch() method.
     }
 
-    public function reduce($identity, BiFunc $biFunc) {
+    public function reduce(BiFunc $accumulator): Optional {
+        $first = true;
         foreach($this->pipeline->execute(...$this->targets) as $v) {
-            $identity = $biFunc->apply($identity, $v);
+            if($first) {
+                $identity = $v;
+                $first = false;
+            } else {
+                $identity = $accumulator->apply($identity, $v);
+            }
         }
-        return $identity;
+
+        if($first) {
+            return Optional::empty();
+        } else {
+            return Optional::of($identity);
+        }
     }
 
     public function count(): int {
         $i = 0;
-        foreach($this->pipeline->execute(...$this->targets) as $_) {
+        $gen = $this->pipeline->execute(...$this->targets);
+
+        while($gen->valid()) {
+            $gen->next();
             ++$i;
         }
+
         return $i;
     }
 
