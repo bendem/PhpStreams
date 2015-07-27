@@ -1,0 +1,13 @@
+{
+    "name": "bendem/streams",
+    "authors": [
+        {
+            "name": "bendem",
+            "email": "online@bendem.be"
+        }
+    ],
+    "autoload": {
+        "psr-0": {"streams\\": "src/"}
+    },
+    "require": {}
+}
