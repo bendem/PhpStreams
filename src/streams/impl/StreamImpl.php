@@ -59,7 +59,6 @@ class StreamImpl implements Stream {
     }
 
     public function findFirst(): Optional {
-        $this->pipeline->setLimit(1);
         $gen = $this->pipeline->execute(...$this->targets);
         if($gen->valid()) {
             return Optional::of($gen->current());
@@ -86,7 +85,7 @@ class StreamImpl implements Stream {
     //}
 
     public function limit(int $size): Stream {
-        $this->pipeline->setLimit($size);
+        $this->pipeline->addOperation(OperationType::LIMIT, $size);
         return $this;
     }
 

@@ -208,3 +208,31 @@ StreamBuilder::generate((function() {
     ->skip(10)
     ->limit(15)
     ->forEach($debugConsumer);
+
+separate();
+
+echo "infinite sorted random stream\n";
+StreamBuilder::generate((function() {
+        while(true) {
+            yield rand();
+        }
+    })())
+    ->limit(15)
+    ->sorted()
+    ->forEach($debugConsumer);
+
+separate();
+
+echo "sort + limit\n";
+StreamBuilder::of(2, 5, 1, 4, 0, 9, 8)
+    ->sorted()
+    ->limit(3)
+    ->forEach($debugConsumer);
+
+separate();
+
+echo "limit + sort\n";
+StreamBuilder::of(2, 5, 1, 4, 0, 9, 8)
+    ->limit(3)
+    ->sorted()
+    ->forEach($debugConsumer);

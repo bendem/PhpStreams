@@ -70,18 +70,6 @@ class Pipeline {
         $this->operations[] = [$type, $operation];
     }
 
-    public function setLimit(int $count) {
-        if($this->expired) {
-            throw new Exception('Pipeline has already been executed');
-        }
-
-        if($count < 0) {
-            throw new InvalidArgumentException('Can\'t set negative limit');
-        }
-
-        $this->limit = $count;
-    }
-
     public function setPreventSorting() {
         $this->preventSorting = true;
     }
@@ -161,6 +149,10 @@ class Pipeline {
             case OperationType::FLAT_MAP: {
                 // TODO
                 break;
+            }
+            case OperationType::LIMIT: {
+                $this->sourcePipeline->limit = $operation;
+                return [$value, false];
             }
             case OperationType::SKIP: {
                 if($operation > 0) {

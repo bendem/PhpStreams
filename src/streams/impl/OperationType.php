@@ -11,5 +11,6 @@ final class OperationType {
     const SORT     = 3;
     const SKIP     = 4;
     const PEEK     = 5;
+    const LIMIT    = 6;
 
 }
