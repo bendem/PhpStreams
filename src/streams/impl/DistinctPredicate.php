@@ -10,6 +10,7 @@ class DistinctPredicate implements Predicate {
 
     private $booleans = [];
     private $scalars = [];
+    private $arrays = [];
     private $objects = []; // TODO Use a more appropriate data structure?
 
     public function test($obj): bool {
@@ -18,6 +19,9 @@ class DistinctPredicate implements Predicate {
         }
         if(is_scalar($obj)) {
             return $this->handleScalar($obj);
+        }
+        if(is_array($obj)) {
+            return $this->handleArray($obj);
         }
         return $this->handleObject($obj);
     }
@@ -35,6 +39,14 @@ class DistinctPredicate implements Predicate {
             return false;
         }
         $this->scalars[$scalar] = true;
+        return true;
+    }
+
+    private function handleArray($array) {
+        if(in_array($array, $this->arrays)) {
+            return false;
+        }
+        $this->arrays[] = $array;
         return true;
     }
 

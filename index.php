@@ -101,7 +101,7 @@ separate();
 
 echo "distinct\n";
 $a = new StdClass;
-$count = StreamBuilder::of(1, 1, 3, true, false, true, 'hey', 'hey', new StdClass, $a, $a)
+$count = StreamBuilder::of(1, 1, 3, true, false, true, 'hey', 'hey', [], new StdClass, $a, $a)
     ->distinct()
     ->count();
 var_dump($count);
