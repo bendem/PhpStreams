@@ -20,6 +20,9 @@ declare(strict_types = 1);
  *
  * + Flat maps are a pain in the ass
  *
+ * + If two calls to Stream::sorted follow each other, the first one second
+ *   one should probably be ignored?
+ *
  * + What to do with collect?
  *
  * + Utility to create classes for the interfaces from closures
