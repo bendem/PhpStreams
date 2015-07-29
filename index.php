@@ -334,3 +334,9 @@ StreamBuilder::of(3, 2, 1)
     })
     ->skip(1)
     ->forEach($debugConsumer);
+
+separate();
+
+$array = StreamBuilder::of(1, 2, 3)
+    ->toArray();
+var_dump($array);

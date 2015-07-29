@@ -119,6 +119,10 @@ class StreamImpl implements Stream {
     //     TODO: Implement collect() method.
     //}
 
+    public function toArray(): array {
+        return iterator_to_array($this->execute());
+    }
+
     public function limit(int $size): Stream {
         $this->pipeline->addOperation(OperationType::LIMIT, $size);
         return $this;

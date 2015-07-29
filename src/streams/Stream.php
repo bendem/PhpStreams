@@ -34,6 +34,7 @@ interface Stream extends IteratorAggregate {
 
     // TODO Figure out what'd be a good prototype for this
     // function collect(Supplier $supplier,  $accumulator);
+    function toArray(): array;
 
     function forEach(Consumer $consumer);
 
