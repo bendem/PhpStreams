@@ -100,12 +100,8 @@ foreach(StreamBuilder::fromArray(range(0, 2))->map(new class implements Func {
 separate();
 
 echo "distinct\n";
-$count = StreamBuilder::fromArray(range(0, 10))
-    ->map(new class implements Func {
-        public function apply($i) {
-            return $i % 2;
-        }
-    })
+$a = new StdClass;
+$count = StreamBuilder::of(1, 1, 3, true, false, true, 'hey', 'hey', new StdClass, $a, $a)
     ->distinct()
     ->count();
 var_dump($count);
