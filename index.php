@@ -48,6 +48,12 @@ function separate() {
     echo "\n-----\n\n";
 }
 
+$debugConsumer = new class implements Consumer {
+    public function accept($obj) {
+        var_dump($obj);
+    }
+};
+
 echo "filtering, mapping, foreach\n";
 StreamBuilder::fromArray(range(0, 15))
     ->filter(new class() implements Predicate {
@@ -60,11 +66,7 @@ StreamBuilder::fromArray(range(0, 15))
             return $object * 2;
         }
     })
-    ->forEach(new class() implements Consumer {
-        public function accept($object) {
-            var_dump($object);
-        }
-    });
+    ->forEach($debugConsumer);
 
 separate();
 
@@ -118,21 +120,13 @@ StreamBuilder::of(1, 'foo', new StdClass)
             return $a;
         }
     })
-    ->peek(new class implements Consumer {
-        public function accept($obj) {
-            var_dump($obj);
-        }
-    })
+    ->peek($debugConsumer)
     ->map(new class implements Func {
         public function apply($obj) {
             return $obj->b;
         }
     })
-    ->forEach(new class implements Consumer {
-        public function accept($obj) {
-            var_dump($obj);
-        }
-    });
+    ->forEach($debugConsumer);
 
 separate();
 
@@ -141,11 +135,7 @@ StreamBuilder::fromArray(range(0, 20))
     ->skip(5)
     ->skip(6)
     ->limit(7)
-    ->forEach(new class implements Consumer {
-        public function accept($obj) {
-            var_dump($obj);
-        }
-    });
+    ->forEach($debugConsumer);
 
 separate();
 
@@ -204,11 +194,7 @@ separate();
 echo "sorting\n";
 StreamBuilder::of(3, 2, 4, 1, 5)
     ->sorted()
-    ->forEach(new class implements Consumer {
-        public function accept($i) {
-            var_dump($i);
-        }
-    });
+    ->forEach($debugConsumer);
 
 separate();
 
@@ -221,8 +207,4 @@ StreamBuilder::generate((function() {
     })())
     ->skip(10)
     ->limit(15)
-    ->forEach(new class implements Consumer {
-        public function accept($i) {
-            var_dump($i);
-        }
-    });
+    ->forEach($debugConsumer);
