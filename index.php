@@ -209,3 +209,20 @@ StreamBuilder::of(3, 2, 4, 1, 5)
             var_dump($i);
         }
     });
+
+separate();
+
+echo "infinite stream\n";
+StreamBuilder::generate((function() {
+        $i = 0;
+        while(true) {
+            yield $i++;
+        }
+    })())
+    ->skip(10)
+    ->limit(15)
+    ->forEach(new class implements Consumer {
+        public function accept($i) {
+            var_dump($i);
+        }
+    });
