@@ -18,7 +18,10 @@ use streams\{
 
 class StreamImpl implements Stream {
 
+    /** @var Pipeline The execution pipeline */
     private $pipeline;
+
+    /** @var array Array of Traversables to execute the pipeline on */
     private $targets = [];
 
     public function __construct(Traversable $target) {

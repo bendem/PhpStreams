@@ -8,8 +8,8 @@ use ArrayIterator;
 use Exception;
 use InvalidArgumentException;
 use Iterator;
-use streams\Comparator;
 use Traversable;
+use streams\Comparator;
 
 class Pipeline {
 

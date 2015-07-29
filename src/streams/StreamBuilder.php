@@ -3,8 +3,8 @@
 namespace streams;
 
 use ArrayIterator;
-use streams\impl\StreamImpl;
 use Traversable;
+use streams\impl\StreamImpl;
 
 class StreamBuilder {
 
