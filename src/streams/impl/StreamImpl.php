@@ -27,7 +27,7 @@ class StreamImpl implements Stream {
     }
 
     public function getIterator(): Iterator {
-        return $this->pipeline->execute(...$this->targets);
+        return $this->execute();
     }
 
     public function concat(Traversable $target): Stream {
@@ -59,7 +59,7 @@ class StreamImpl implements Stream {
     }
 
     public function findFirst(): Optional {
-        $gen = $this->pipeline->execute(...$this->targets);
+        $gen = $this->execute();
         if($gen->valid()) {
             return Optional::of($gen->current());
         } else {
@@ -73,7 +73,7 @@ class StreamImpl implements Stream {
     }
 
     public function allMatch(Predicate $predicate): bool {
-        $gen = $this->pipeline->execute(...$this->targets);
+        $gen = $this->execute();
 
         while($gen->valid()) {
             if(!$predicate->test($gen->current())) {
@@ -86,7 +86,7 @@ class StreamImpl implements Stream {
     }
 
     public function anyMatch(Predicate $predicate): bool {
-        $gen = $this->pipeline->execute(...$this->targets);
+        $gen = $this->execute();
 
         while($gen->valid()) {
             if($predicate->test($gen->current())) {
@@ -99,7 +99,7 @@ class StreamImpl implements Stream {
     }
 
     public function noneMatch(Predicate $predicate): bool {
-        $gen = $this->pipeline->execute(...$this->targets);
+        $gen = $this->execute();
 
         while($gen->valid()) {
             if($predicate->test($gen->current())) {
@@ -140,7 +140,7 @@ class StreamImpl implements Stream {
 
     public function reduce(BiFunc $accumulator): Optional {
         $first = true;
-        foreach($this->pipeline->execute(...$this->targets) as $v) {
+        foreach($this->execute() as $v) {
             if($first) {
                 $identity = $v;
                 $first = false;
@@ -158,7 +158,7 @@ class StreamImpl implements Stream {
 
     public function count(): int {
         $i = 0;
-        $gen = $this->pipeline->execute(...$this->targets);
+        $gen = $this->execute();
 
         while($gen->valid()) {
             $gen->next();
@@ -169,11 +169,15 @@ class StreamImpl implements Stream {
     }
 
     public function forEach(Consumer $consumer) {
-        $gen = $this->pipeline->execute(...$this->targets);
+        $gen = $this->execute();
         while($gen->valid()) {
             $consumer->accept($gen->current());
             $gen->next();
         }
+    }
+
+    private function execute(): Iterator {
+        return $this->pipeline->execute(...$this->targets);
     }
 
 }
