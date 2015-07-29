@@ -3,7 +3,6 @@
 namespace streams;
 
 use ArrayIterator;
-use Generator;
 use streams\impl\StreamImpl;
 use Traversable;
 
@@ -22,7 +21,8 @@ class StreamBuilder {
     }
 
     public static function empty(): Stream {
-        // TODO
+        // TODO Do better?
+        return static::of();
     }
 
 }

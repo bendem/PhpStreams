@@ -43,8 +43,9 @@ class StreamImpl implements Stream {
         return $this->filter(new DistinctPredicate());
     }
 
-    public function sort(Comparator $comparator = null): Stream {
-        $this->pipeline->addOperation(OperationType::SORT, $comparator ?? NaturalComparator::INSTANCE);
+    public function sorted(Comparator $comparator = null): Stream {
+        $this->pipeline->addOperation(OperationType::SORT, $comparator ?? NaturalComparator::getInstance());
+        return $this;
     }
 
     public function map(Func $function): Stream {
@@ -67,7 +68,7 @@ class StreamImpl implements Stream {
     }
 
     public function findAny(): Optional {
-        // TODO Ignore sorting!
+        $this->pipeline->setPreventSorting();
         return $this->findFirst();
     }
 
@@ -141,8 +142,10 @@ class StreamImpl implements Stream {
     }
 
     public function forEach(Consumer $consumer) {
-        foreach($this->pipeline->execute(...$this->targets) as $v) {
-            $consumer->accept($v);
+        $gen = $this->pipeline->execute(...$this->targets);
+        while($gen->valid()) {
+            $consumer->accept($gen->current());
+            $gen->next();
         }
     }
 

@@ -17,7 +17,7 @@ interface Stream extends IteratorAggregate {
     function map(Func $function): Stream;
     function peek(Consumer $consumer): Stream;
     function skip(int $count): Stream;
-    function sort(Comparator $comparator = null): Stream;
+    function sorted(Comparator $comparator = null): Stream;
 
     function max(Comparator $comparator = null): Optional;
     function min(Comparator $comparator = null): Optional;

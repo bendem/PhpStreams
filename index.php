@@ -18,16 +18,13 @@ declare(strict_types = 1);
  *       $it->next();
  *   } would be wise?
  *
- * + Gotta find a way to sort stuff somehow. Probably need to split the pipeline
- *   operations for each sort (maybe combined with insertion sort)
- *
- * + findAny should ignore all kind of sorting
- *
  * + Flat maps are a pain in the ass
  *
  * + What to do with collect?
  *
  * + Utility to create classes for the interfaces from closures
+ *
+ * + Validate values provided to the public API
  *
  */
 
@@ -189,3 +186,23 @@ $first = StreamBuilder::of()
     ->findFirst();
 var_dump($first->isPresent());
 // var_dump($first->get());
+
+separate();
+
+echo "findAny\n";
+$first = StreamBuilder::of(5, 4, 6)
+    ->sorted()
+    ->findAny();
+var_dump($first->isPresent());
+var_dump($first->get());
+
+separate();
+
+echo "sorting\n";
+StreamBuilder::of(3, 2, 4, 1, 5)
+    ->sorted()
+    ->forEach(new class implements Consumer {
+        public function accept($i) {
+            var_dump($i);
+        }
+    });
