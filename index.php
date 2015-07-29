@@ -54,6 +54,12 @@ $debugConsumer = new class implements Consumer {
     }
 };
 
+$oddPredicate = new class implements Predicate {
+    public function test($i): bool {
+        return $i % 2 === 0;
+    }
+};
+
 echo "filtering, mapping, foreach\n";
 StreamBuilder::fromArray(range(0, 15))
     ->filter(new class() implements Predicate {
@@ -236,3 +242,45 @@ StreamBuilder::of(2, 5, 1, 4, 0, 9, 8)
     ->limit(3)
     ->sorted()
     ->forEach($debugConsumer);
+
+separate();
+
+echo "allMatch (true)\n";
+$res = StreamBuilder::of(4, 6, 2, 0, 12)
+    ->allMatch($oddPredicate);
+var_dump($res);
+
+separate();
+
+echo "allMatch (false)\n";
+$res = StreamBuilder::of(4, 6, 2, 0, 1)
+    ->allMatch($oddPredicate);
+var_dump($res);
+
+separate();
+
+echo "anyMatch (true)\n";
+$res = StreamBuilder::of(4, 6, 5, 0, 1)
+    ->anyMatch($oddPredicate);
+var_dump($res);
+
+separate();
+
+echo "anyMatch (false)\n";
+$res = StreamBuilder::of(1, 3, 5, 3, 9)
+    ->anyMatch($oddPredicate);
+var_dump($res);
+
+separate();
+
+echo "noneMatch (true)\n";
+$res = StreamBuilder::of(1, 3, 5, 3, 9)
+    ->noneMatch($oddPredicate);
+var_dump($res);
+
+separate();
+
+echo "noneMatch (false)\n";
+$res = StreamBuilder::of(1, 3, 5, 3, 2)
+    ->noneMatch($oddPredicate);
+var_dump($res);

@@ -73,11 +73,42 @@ class StreamImpl implements Stream {
     }
 
     public function allMatch(Predicate $predicate): bool {
-        // TODO: Implement allMatch() method.
+        $gen = $this->pipeline->execute(...$this->targets);
+
+        while($gen->valid()) {
+            if(!$predicate->test($gen->current())) {
+                return false;
+            }
+            $gen->next();
+        }
+
+        return true;
     }
 
     public function anyMatch(Predicate $predicate): bool {
-        // TODO: Implement anyMatch() method.
+        $gen = $this->pipeline->execute(...$this->targets);
+
+        while($gen->valid()) {
+            if($predicate->test($gen->current())) {
+                return true;
+            }
+            $gen->next();
+        }
+
+        return false;
+    }
+
+    public function noneMatch(Predicate $predicate): bool {
+        $gen = $this->pipeline->execute(...$this->targets);
+
+        while($gen->valid()) {
+            if($predicate->test($gen->current())) {
+                return false;
+            }
+            $gen->next();
+        }
+
+        return true;
     }
 
     //public function collect(Closure $supplier, Closure $accumulator): Stream {
@@ -105,10 +136,6 @@ class StreamImpl implements Stream {
 
     public function max(Comparator $comparator = null): Optional {
         return $this->reduce(new EvictionBiFunc($comparator, true));
-    }
-
-    public function noneMatch(Predicate $predicate): bool {
-        // TODO: Implement noneMatch() method.
     }
 
     public function reduce(BiFunc $accumulator): Optional {
