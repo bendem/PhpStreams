@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace streams\impl;
 
-use ArrayIterator;
 use ErrorException;
 use Iterator;
 use LogicException;
@@ -193,7 +192,7 @@ class Pipeline {
             return $this->comparator->compare($o1, $o2);
         });
 
-        return new ArrayIterator($values);
+        yield from $values;
     }
 
 }
