@@ -5,9 +5,6 @@ declare(strict_types = 1);
 /**
  * + Skipping is weird, it should maybe be handled outside the pipeline
  *
- * + match/min/max stuff don't go through the execute method, a specific
- *   one will be added
- *
  * + Need to replace OperationType with an enum when it's available
  *   (https://wiki.php.net/rfc/enum)
  *
