@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace streams\impl;
 
+use InvalidArgumentException;
 use Iterator;
 use Traversable;
 use streams\{
@@ -124,12 +125,20 @@ class StreamImpl implements Stream {
     }
 
     public function limit(int $size): Stream {
+        if($size < 0) {
+            throw new InvalidArgumentException('Limit cannot go below 0');
+        }
         $this->pipeline->addOperation(OperationType::LIMIT, $size);
         return $this;
     }
 
     public function skip(int $count): Stream {
-        $this->pipeline->addOperation(OperationType::SKIP, $count);
+        if($count < 0) {
+            throw new InvalidArgumentException('Skip count cannot go below 0');
+        }
+        if($count != 0) {
+            $this->pipeline->addOperation(OperationType::SKIP, $count);
+        }
         return $this;
     }
 

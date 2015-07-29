@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace streams\impl;
 
 use ArrayIterator;
-use Exception;
-use InvalidArgumentException;
+use ErrorException;
 use Iterator;
+use LogicException;
 use Traversable;
 use streams\Comparator;
 
@@ -80,7 +80,7 @@ class Pipeline {
 
     public function execute(Traversable... $targets): Iterator {
         if($this->expired) {
-            throw new Exception('Pipeline has already been executed');
+            throw new LogicException('Pipeline has already been executed');
         }
         $this->expired = true;
 
@@ -180,7 +180,7 @@ class Pipeline {
                 break;
             }
             default: {
-                throw new Exception('Unsupported operation in the pipeline: ' . $type);
+                throw new ErrorException('Unsupported operation in the pipeline: ' . $type);
             }
         }
         return [$value, false, false];

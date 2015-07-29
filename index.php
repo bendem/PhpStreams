@@ -22,8 +22,6 @@ declare(strict_types = 1);
  *
  * + Utility to create classes for the interfaces from closures
  *
- * + Validate values provided to the public API
- *
  */
 
 require 'vendor/autoload.php';

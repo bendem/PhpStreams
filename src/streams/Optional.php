@@ -2,6 +2,8 @@
 
 namespace streams;
 
+use RuntimeException;
+
 class Optional {
 
     private $value;
@@ -26,8 +28,7 @@ class Optional {
 
     public function get() {
         if(!$this->hasValue) {
-            // TODO Better exception hierarchy
-            throw new \Exception();
+            throw new RuntimeException();
         }
         return $this->value;
     }
