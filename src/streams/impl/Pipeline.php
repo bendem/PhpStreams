@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace streams\impl;
 
-use ErrorException;
 use Iterator;
 use LogicException;
 use Traversable;
@@ -179,7 +178,7 @@ class Pipeline {
                 break;
             }
             default: {
-                throw new ErrorException('Unsupported operation in the pipeline: ' . $type);
+                assert(false, 'Unsupported operation in the pipeline: ' . $type);
             }
         }
         return [$value, false, false];
