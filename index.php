@@ -15,8 +15,6 @@ declare(strict_types = 1);
  *       $it->next();
  *   } would be wise?
  *
- * + Flat maps are a pain in the ass
- *
  * + If two calls to Stream::sorted follow each other, the first one second
  *   one should probably be ignored?
  *
