@@ -11,7 +11,7 @@ class DistinctPredicate implements Predicate {
     private $booleans = [];
     private $scalars = [];
     private $arrays = [];
-    private $objects = []; // TODO Use a more appropriate data structure?
+    private $objects = [];
 
     public function test($obj): bool {
         if(is_bool($obj)) {
