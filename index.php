@@ -281,3 +281,62 @@ echo "noneMatch (false)\n";
 $res = StreamBuilder::of(1, 3, 5, 3, 2)
     ->noneMatch($oddPredicate);
 var_dump($res);
+
+separate();
+
+echo "flatMap\n";
+StreamBuilder::of(3, 2, 1)
+    ->flatMap(new class implements Func {
+        public function apply($i) {
+            return StreamBuilder::fromArray(array_fill(0, $i, $i));
+        }
+    })
+    ->forEach($debugConsumer);
+
+separate();
+
+echo "flatMap + sorted\n";
+StreamBuilder::of(3, 2, 1)
+    ->flatMap(new class implements Func {
+        public function apply($i) {
+            return StreamBuilder::fromArray(array_fill(0, $i, $i));
+        }
+    })
+    ->sorted()
+    ->forEach($debugConsumer);
+
+separate();
+
+echo "limit + flatMap\n";
+StreamBuilder::of(3, 2, 1)
+    ->limit(2)
+    ->flatMap(new class implements Func {
+        public function apply($i) {
+            return StreamBuilder::fromArray(array_fill(0, $i, $i));
+        }
+    })
+    ->forEach($debugConsumer);
+
+separate();
+
+echo "skip + flatMap\n";
+StreamBuilder::of(3, 2, 1)
+    ->skip(1)
+    ->flatMap(new class implements Func {
+        public function apply($i) {
+            return StreamBuilder::fromArray(array_fill(0, $i, $i));
+        }
+    })
+    ->forEach($debugConsumer);
+
+separate();
+
+echo "flatMap + skip\n";
+StreamBuilder::of(3, 2, 1)
+    ->flatMap(new class implements Func {
+        public function apply($i) {
+            return StreamBuilder::fromArray(array_fill(0, $i, $i));
+        }
+    })
+    ->skip(1)
+    ->forEach($debugConsumer);

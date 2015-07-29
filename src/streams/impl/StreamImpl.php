@@ -54,8 +54,9 @@ class StreamImpl implements Stream {
         return $this;
     }
 
-    public function flatMap(Traversable $function): Stream {
-        // TODO: Implement flatMap() method.
+    public function flatMap(Func $function): Stream {
+        $this->pipeline->addOperation(OperationType::FLAT_MAP, $function);
+        return $this;
     }
 
     public function findFirst(): Optional {

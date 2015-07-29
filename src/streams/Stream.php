@@ -12,7 +12,7 @@ interface Stream extends IteratorAggregate {
     function concat(Traversable $target): Stream;
     function distinct(): Stream;
     function filter(Predicate $predicate): Stream;
-    function flatMap(Traversable $function): Stream;
+    function flatMap(Func $function): Stream;
     function limit(int $size): Stream;
     function map(Func $function): Stream;
     function peek(Consumer $consumer): Stream;

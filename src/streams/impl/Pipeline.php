@@ -67,6 +67,10 @@ class Pipeline {
             return;
         }
 
+        if($type === OperationType::FLAT_MAP) {
+            $this->finalized = true;
+        }
+
         $this->operations[] = [$type, $operation];
     }
 
@@ -114,9 +118,18 @@ class Pipeline {
                 continue;
             }
 
-            list($value, $filtered) = $this->applyOperations($v);
+            list($value, $filtered, $flatten) = $this->applyOperations($v);
 
-            if(!$filtered) {
+            if($flatten) {
+                foreach($value as $v) {
+                    if($this->count >= $this->sourcePipeline->limit) {
+                        break 2;
+                    }
+
+                    ++$this->count;
+                    yield $v;
+                }
+            } else if(!$filtered) {
                 ++$this->count;
                 yield $value;
             }
@@ -125,10 +138,10 @@ class Pipeline {
 
     private function applyOperations($value) {
         foreach($this->operations as &$operation) {
-            list($value, $filtered) = $this->applyOperation($operation[0], $operation[1], $value);
+            list($value, $filtered, $flatten) = $this->applyOperation($operation[0], $operation[1], $value);
 
-            if($filtered) {
-                return [$value, $filtered];
+            if($filtered || $flatten) {
+                return [$value, $filtered, $flatten];
             }
         }
         return [$value, false];
@@ -138,7 +151,7 @@ class Pipeline {
         switch($type) {
             case OperationType::FILTER: {
                 if(!$operation->test($value)) {
-                    return [null, true];
+                    return [null, true, false];
                 }
                 break;
             }
@@ -147,18 +160,18 @@ class Pipeline {
                 break;
             }
             case OperationType::FLAT_MAP: {
-                // TODO
+                return [$operation->apply($value), false, true];
                 break;
             }
             case OperationType::LIMIT: {
                 $this->sourcePipeline->limit = $operation;
-                return [$value, false];
+                return [$value, false, false];
             }
             case OperationType::SKIP: {
                 if($operation > 0) {
                     $this->sourcePipeline->skipping += $operation - 1;
                     $operation = 0;
-                    return [$value, true];
+                    return [$value, true, false];
                 }
                 break;
             }
@@ -170,7 +183,7 @@ class Pipeline {
                 throw new Exception('Unsupported operation in the pipeline: ' . $type);
             }
         }
-        return [$value, false];
+        return [$value, false, false];
     }
 
     private function sort(Iterator $values): Iterator {
