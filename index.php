@@ -335,6 +335,7 @@ StreamBuilder::of(3, 2, 1)
 
 separate();
 
+echo "toArray\n";
 $array = StreamBuilder::of(1, 2, 3)
     ->toArray();
 var_dump($array);
