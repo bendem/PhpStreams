@@ -18,7 +18,7 @@ declare(strict_types = 1);
  * + If two calls to Stream::sorted follow each other, the first one second
  *   one should probably be ignored?
  *
- * + What to do with collect?
+ * + Implement all kinds of collectors
  *
  * + Utility to create classes for the interfaces from closures
  *

@@ -9,6 +9,7 @@ use Iterator;
 use Traversable;
 use streams\{
     BiFunc,
+    Collector,
     Comparator,
     Consumer,
     Func,
@@ -116,9 +117,19 @@ class StreamImpl implements Stream {
         return true;
     }
 
-    //public function collect(Closure $supplier, Closure $accumulator): Stream {
-    //     TODO: Implement collect() method.
-    //}
+    public function collect(Collector $collector): Stream {
+        $gen = $this->execute();
+
+        $supplied = $collector->supplier()->get();
+
+        while($gen->valid()) {
+            $supplied = $collector->accumulator()->apply($supplied, $gen->next());
+
+            $gen->next();
+        }
+
+        return $collector->finisher()->apply($supplied);
+    }
 
     public function toArray(): array {
         return iterator_to_array($this->execute());

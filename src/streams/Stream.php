@@ -31,9 +31,8 @@ interface Stream extends IteratorAggregate {
 
     // TODO Reduce with provided indentity (reduce($identity, BiFunc $accumulator))
     function reduce(BiFunc $accumulator);
+    function collect(Collector $collector);
 
-    // TODO Figure out what'd be a good prototype for this
-    // function collect(Supplier $supplier,  $accumulator);
     function toArray(): array;
 
     function forEach(Consumer $consumer);
