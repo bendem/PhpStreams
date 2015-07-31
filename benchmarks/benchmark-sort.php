@@ -15,7 +15,7 @@ $count = 1000000;
 $test = [];
 
 for($i = 0; $i < $count; $i++) {
-    $test[] = $i;
+    $test[] = $count - $i;
 }
 
 
