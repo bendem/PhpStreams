@@ -142,7 +142,7 @@ class Pipeline {
                 return [$value, $filtered, $flatten];
             }
         }
-        return [$value, false];
+        return [$value, false, false];
     }
 
     private function applyOperation(/*OperationType*/int $type, &$operation, $value) {
