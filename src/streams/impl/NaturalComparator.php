@@ -8,7 +8,7 @@ class NaturalComparator implements Comparator {
 
     private static $INSTANCE = null;
 
-    public function getInstance(): Comparator {
+    public static function getInstance(): Comparator {
         if(static::$INSTANCE === null) {
             static::$INSTANCE = new NaturalComparator();
         }
